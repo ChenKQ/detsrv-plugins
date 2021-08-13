@@ -3,7 +3,7 @@ project(detsrv-plugins LANGUAGES C CXX)
 
 set(LIBRARY_OUTPUT_PATH    ${PROJECT_SOURCE_DIR}/build)
 
-set(PluginName "minic")
+set(PluginName "trtyolov5")
 
 add_subdirectory(${PluginName})
 
