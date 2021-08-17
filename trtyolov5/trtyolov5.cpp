@@ -121,7 +121,7 @@ DetectionResult DetectionYoloV5::detect(const char* rawData, size_t length)
             // std::cout << "box: " << res[j].bbox[0] << ":" << res[j].bbox[1] << ":"
             //           << res[j].bbox[2] << ":" << res[j].bbox[3] << "\n";
             cv::Rect r = get_rect(img, res[j].bbox);
-            std::string name = std::to_string(res[j].class_id);
+            std::string name = std::to_string(static_cast<int>(res[j].class_id));
             double prob = res[j].conf;
             int minx = std::max(r.x, 0);
             int maxx = std::min(r.x + r.width, img.cols);

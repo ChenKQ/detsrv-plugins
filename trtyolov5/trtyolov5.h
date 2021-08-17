@@ -43,7 +43,7 @@ private:
     const double nmsThresh = 0.4;
     const double confidenceThresh = 0.5;
     
-    const std::string engineName = "trtyolov5.engine";
+    const std::string engineName = "uavship.engine";
     const int batchSize = 1;
     const int inputWidth = Yolo::INPUT_W;
     const int inputHeight = Yolo::INPUT_H;
