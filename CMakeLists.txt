@@ -6,7 +6,7 @@ set(LIBRARY_OUTPUT_PATH    ${PROJECT_SOURCE_DIR}/build)
 link_directories(/usr/local/cuda/lib64)
 link_directories(/usr/lib/aarch64-linux-gnu)
 
-set(PluginName "trtyolov5")
+set(PluginName "uavship")
 
 add_subdirectory(${PluginName})
 
