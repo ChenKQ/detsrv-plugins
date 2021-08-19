@@ -139,10 +139,10 @@ DetectionResult DetectionYoloV5::detect(const char* rawData, size_t length)
             // std::cout << "height is " << (maxy-miny) << "\n";
             BBox box {count, name, prob, minx, maxx, miny, maxy};
             result.list.push_back(box);
-            cv::rectangle(img, r, cv::Scalar(0x27, 0xC1, 0x36), 2);
-            cv::putText(img, std::to_string((int)res[j].class_id), cv::Point(r.x, r.y - 1), cv::FONT_HERSHEY_PLAIN, 1.2, cv::Scalar(0xFF, 0xFF, 0xFF), 2);
+            // cv::rectangle(img, r, cv::Scalar(0x27, 0xC1, 0x36), 2);
+            // cv::putText(img, std::to_string((int)res[j].class_id), cv::Point(r.x, r.y - 1), cv::FONT_HERSHEY_PLAIN, 1.2, cv::Scalar(0xFF, 0xFF, 0xFF), 2);
         }
-        cv::imwrite("saved.png", img);
+        // cv::imwrite("saved.png", img);
     }
     
     return std::move(result);
