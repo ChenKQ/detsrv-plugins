@@ -4,11 +4,11 @@ find_package(CUDA REQUIRED)
 find_package(OpenCV)
 include_directories(${OpenCV_INCLUDE_DIRS})
 
-set(TensorRTXROOT "/home/chenkq/workspace/tensorrtx/yolov5")
+set(TensorRTXROOT "/home/nvidia/workspace/tensorrtx/yolov5")
 set(EngineFile ${TensorRTXROOT}/build/uavship.engine)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC -Wl,-rpath=./")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -Wl,-rpath=./")
 
 add_library(uavship SHARED trtyolov5.cpp)
 target_include_directories(uavship PUBLIC ${TensorRTXROOT})
