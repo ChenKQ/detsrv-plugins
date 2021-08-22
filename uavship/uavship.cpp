@@ -1,4 +1,4 @@
-#include "trtyolov5.h"
+#include "uavship.h"
 #include "detsvr/IDetect.h"
 #include "cuda_utils.h"
 #include <fstream>
@@ -11,7 +11,7 @@
 namespace detsvr
 {
 
-DetectionYoloV5::DetectionYoloV5()
+UAVShip::UAVShip()
 {
     cudaSetDevice(deviceID);
 
@@ -59,7 +59,7 @@ DetectionYoloV5::DetectionYoloV5()
     CUDA_CHECK(cudaStreamCreate(&stream));
 }
 
-DetectionYoloV5::~DetectionYoloV5()
+UAVShip::~UAVShip()
 {
     // Release stream and buffers
     cudaStreamDestroy(stream);
@@ -73,7 +73,7 @@ DetectionYoloV5::~DetectionYoloV5()
     runtime->destroy();
 }
 
-void DetectionYoloV5::doInference(float* input, float* output) 
+void UAVShip::doInference(float* input, float* output) 
 {
     // DMA input batch data to device, infer on the batch asynchronously, and DMA output back to host
     CUDA_CHECK(cudaMemcpyAsync(buffers[0], input, batchSize * 3 * inputHeight * inputWidth * sizeof(float), cudaMemcpyHostToDevice, stream));
@@ -82,7 +82,7 @@ void DetectionYoloV5::doInference(float* input, float* output)
     cudaStreamSynchronize(stream);
 }
 
-DetectionResult DetectionYoloV5::detect(const char* rawData, size_t length)
+DetectionResult UAVShip::detect(const char* rawData, size_t length)
 {
     auto start = std::chrono::high_resolution_clock::now();
     const unsigned char* pData = (const unsigned char*)rawData;
@@ -148,7 +148,7 @@ DetectionResult DetectionYoloV5::detect(const char* rawData, size_t length)
     return std::move(result);
 }
 
-void DetectionYoloV5::preprocessImg(cv::Mat& img)
+void UAVShip::preprocessImg(cv::Mat& img)
 {
     int w, h, x, y;
     float r_w = inputWidth / (img.cols*1.0);
@@ -198,7 +198,7 @@ void DetectionYoloV5::preprocessImg(cv::Mat& img)
 
 std::shared_ptr<IDetect> createInstance()
 {
-    IDetect* ptr = new DetectionYoloV5();
+    IDetect* ptr = new UAVShip();
     return std::shared_ptr<IDetect>(ptr);
 }
 

@@ -14,11 +14,11 @@
 namespace detsvr
 {
 
-class DetectionYoloV5 final : public IDetect 
+class UAVShip final : public IDetect 
 {
 public:
-    DetectionYoloV5();
-    virtual ~DetectionYoloV5();
+    UAVShip();
+    virtual ~UAVShip();
 
     DetectionResult detect(const char* data, size_t length) override; 
 
