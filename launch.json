@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${command:cmake.launchTargetPath}",
-            "args": ["bus.jpg"],
+            "args": [""],
             "stopAtEntry": false,
             "cwd": "${workspaceRoot}/build",
             "environment": [],

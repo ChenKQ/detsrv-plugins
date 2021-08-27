@@ -148,6 +148,70 @@ DetectionResult UAVShip::detect(const char* rawData, size_t length)
     return std::move(result);
 }
 
+DetectionResult UAVShip::detect(int rows, int cols, int type, void* pdata, size_t step)
+{
+    auto start = std::chrono::high_resolution_clock::now();
+    cv::Mat img(rows, cols, type, pdata, step);
+    if (img.empty()) return {};
+    preprocessImg(img); // letterbox BGR to RGB
+    auto end = std::chrono::high_resolution_clock::now();
+    int pretime = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+
+    // Run inference
+    start = std::chrono::high_resolution_clock::now();
+    doInference(data.get(), prob.get());
+    // end = std::chrono::high_resolution_clock::now();
+    std::vector<std::vector<Yolo::Detection>> batch_res(1);
+    for (int b = 0; b < batchSize; b++) {
+        auto& res = batch_res[b];
+        nms(res, &prob[b * outputSize], confidenceThresh, nmsThresh);
+    }
+    end = std::chrono::high_resolution_clock::now();
+    int inftime = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+
+    
+    DetectionResult result;
+    result.img_tag = "";
+    result.img_time = "";
+    result.img_height = img.rows;
+    result.img_width = img.cols;
+    result.pre_time = pretime;
+    result.inf_time = inftime;
+    result.list.clear();
+    int count = 0;
+    for (int b = 0; b < batchSize; b++) {
+        auto& res = batch_res[b];
+        for (size_t j = 0; j < res.size(); j++) {
+            // std::cout << "box: " << res[j].bbox[0] << ":" << res[j].bbox[1] << ":"
+            //           << res[j].bbox[2] << ":" << res[j].bbox[3] << "\n";
+            cv::Rect r = get_rect(img, res[j].bbox);
+            std::string name = std::to_string(static_cast<int>(res[j].class_id));
+            double prob = res[j].conf;
+            int minx = std::max(r.x, 0);
+            int maxx = std::min(r.x + r.width, img.cols);
+            if(minx>=maxx)
+            {
+                continue;
+            }
+            int miny = std::max(r.y, 0);
+            int maxy = std::min(r.y + r.height, img.rows);
+            if(miny>=maxy)
+            {
+                continue;
+            }
+            ++count;
+            // std::cout << "height is " << (maxy-miny) << "\n";
+            BBox box {count, name, prob, minx, maxx, miny, maxy};
+            result.list.push_back(box);
+            // cv::rectangle(img, r, cv::Scalar(0x27, 0xC1, 0x36), 2);
+            // cv::putText(img, std::to_string((int)res[j].class_id), cv::Point(r.x, r.y - 1), cv::FONT_HERSHEY_PLAIN, 1.2, cv::Scalar(0xFF, 0xFF, 0xFF), 2);
+        }
+        // cv::imwrite("saved.png", img);
+    }
+    
+    return std::move(result);
+}
+
 void UAVShip::preprocessImg(cv::Mat& img)
 {
     int w, h, x, y;
@@ -198,7 +262,7 @@ void UAVShip::preprocessImg(cv::Mat& img)
 
 std::shared_ptr<IDetect> createInstance()
 {
-    IDetect* ptr = new UAVShip();
+    IDetect* ptr = new detsvr::UAVShip();
     return std::shared_ptr<IDetect>(ptr);
 }
 

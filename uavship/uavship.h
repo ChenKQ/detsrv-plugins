@@ -21,7 +21,7 @@ public:
     virtual ~UAVShip();
 
     DetectionResult detect(const char* data, size_t length) override; 
-
+    DetectionResult detect(int rows, int cols, int type, void* pdata, size_t step) override;
 private:
     void preprocessImg(cv::Mat& img);
     void doInference(float* input, float* output);
