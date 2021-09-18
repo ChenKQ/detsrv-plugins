@@ -1,5 +1,5 @@
 #include "uavship.h"
-#include "detsvr/IDetect.h"
+#include "detcore/detection.h"
 #include "cuda_utils.h"
 #include <fstream>
 #include <iostream>
@@ -84,6 +84,7 @@ void UAVShip::doInference(float* input, float* output)
 
 DetectionResult UAVShip::detect(const char* rawData, size_t length)
 {
+    std::cout << "entry...\n";
     auto start = std::chrono::high_resolution_clock::now();
     const unsigned char* pData = (const unsigned char*)rawData;
     std::vector<unsigned char> imgVec(pData, pData+ length);
@@ -259,12 +260,11 @@ void UAVShip::preprocessImg(cv::Mat& img)
     // return;
 }
 
-
-std::shared_ptr<IDetect> createInstance()
-{
-    IDetect* ptr = new detsvr::UAVShip();
-    return std::shared_ptr<IDetect>(ptr);
-}
-
 } // namespace detsvr
+
+std::shared_ptr<detsvr::IDetect> createInstance()
+{
+    detsvr::IDetect* ptr = new detsvr::UAVShip();
+    return std::shared_ptr<detsvr::IDetect>(ptr);
+}
 

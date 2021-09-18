@@ -1,8 +1,7 @@
 #ifndef _DETSVR_DETECTION_MINIC_
 #define _DETSVR_DETECTION_MINIC_
 
-#include "detsvr/IDetect.h"
-#include "detsvr/detectionresult.h"
+#include "detcore/detection.h"
 
 namespace detsvr
 {

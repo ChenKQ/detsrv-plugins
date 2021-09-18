@@ -1,12 +1,14 @@
 #include "minic.h"
-#include "detsvr/IDetect.h"
+#include "detcore/detection.h"
 #include <fstream>
+#include <iostream>
 
 namespace detsvr
 {
 
 DetectionResult DetectionMinic::detect(const char* data, size_t length)
 {
+    std::cout << "entry ... \n";
     std::fstream saveFile("dump.jpg", std::ios::binary | std::ios::out);
     if(saveFile.is_open())
     {

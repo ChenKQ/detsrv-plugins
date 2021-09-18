@@ -1,10 +1,10 @@
-#include "detsvr/IDetect.h"
-#include "detsvr/detectionresult.h"
+#include "detcore/detection.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <memory>
-#include <opencv2/opencv.hpp>
+#include <chrono>
+// #include <opencv2/opencv.hpp>
 
 int main(int argc, const char* argv[])
 {
@@ -28,11 +28,12 @@ int main(int argc, const char* argv[])
     // cv::imwrite("save.jpg", img);
     
 
-    auto pDetector = detsvr::createInstance();
+    auto pDetector = createInstance();
     // warmup
     for(int i = 0; i<5; ++i)
     {
         detsvr::DetectionResult result = pDetector->detect(str.c_str(), str.length());
+        // detsvr::DetectionResult result = pDetector->detect(img.rows, img.cols, img.type(), img.data, img.step);
 
         std::cout   << "{img_width: " << result.img_width 
                     << ", img_height: " << result.img_height
@@ -45,6 +46,7 @@ int main(int argc, const char* argv[])
     for(int i = 0; i<testRepeat; ++i)
     {
         detsvr::DetectionResult result = pDetector->detect(str.c_str(), str.length());
+        // detsvr::DetectionResult result = pDetector->detect(img.rows, img.cols, img.type(), img.data, img.step);
 
         // std::cout   << "{img_width: " << result.img_width 
         //             << ", img_height: " << result.img_height
